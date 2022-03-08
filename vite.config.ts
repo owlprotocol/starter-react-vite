@@ -10,6 +10,7 @@ import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfil
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
 import rollupNodePolyFill from 'rollup-plugin-node-polyfills';
 //import path from 'path';
+//import dts from 'vite-dts'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -97,6 +98,7 @@ export default defineConfig({
                 // Enable rollup polyfills plugin
                 // used during production bundling
                 rollupNodePolyFill(),
+                //dts(), //Generate .d.ts in production
             ],
         },
     },
