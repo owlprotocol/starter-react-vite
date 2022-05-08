@@ -6,7 +6,6 @@ import rollupInject from '@rollup/plugin-inject';
 
 //Vite Plugins
 import ReactPlugin from '@vitejs/plugin-react';
-import EnvironmentPlugin from 'vite-plugin-environment';
 import CheckerPlugin from 'vite-plugin-checker';
 import SVGRPlugin from 'vite-plugin-svgr';
 import DTSPlugin from 'vite-dts'
@@ -18,8 +17,6 @@ export default defineConfig({
         rollupInject({
             Buffer: ['buffer', 'Buffer'],
         }),
-        //Expose envars with traditional process.env
-        EnvironmentPlugin('all', { prefix: 'VITE_' }),
         SVGRPlugin(),
         CheckerPlugin({
             typescript: true,
@@ -43,7 +40,7 @@ export default defineConfig({
         //Library Mode
         //https://vitejs.dev/guide/build.html#library-mode
         lib: {
-            entry: resolve(__dirname, 'src/components/index.ts'),
+            entry: resolve(__dirname, 'src/index.ts'),
             name: 'DemoComponentsLib',
             fileName: (format) => `vite-demo-components-lib.${format}.js`,
         },
@@ -54,7 +51,7 @@ export default defineConfig({
                 globals: {
                     react: 'React',
                     'react-dom': 'ReactDOM',
-                    'web3': 'Web3'
+                    web3: 'Web3'
                 },
             },
         },

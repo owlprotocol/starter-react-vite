@@ -1,7 +1,8 @@
 /// <reference types="vite/client" />
 
-interface ImportMetaEnv {
+export interface ImportMetaEnv {
     readonly VITE_APP_TITLE: string
+    readonly VITE_RPC_URL: string
     // more env variables...
 }
 

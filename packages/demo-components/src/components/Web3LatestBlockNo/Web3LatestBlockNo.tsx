@@ -1,7 +1,8 @@
 import Web3 from 'web3';
 import { useEffect, useState } from 'react';
+import { getEnvironment } from '../../environment';
 
-const web3 = new Web3(import.meta.env.VITE_RPC_URL);
+const web3 = new Web3(getEnvironment().VITE_RPC_URL);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const Web3LatestBlockNo = (_: any) => {

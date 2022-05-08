@@ -1,5 +1,5 @@
 packages:
   - "packages/demo-components"
-  #- "packages/demo-app"
+  - "packages/demo-app"
 
-shamefully-hoist: true
+shamefully-hoist: false
