@@ -45,7 +45,7 @@ export default defineConfig({
         lib: {
             entry: resolve(__dirname, 'src/components/index.ts'),
             name: 'DemoComponentsLib',
-            fileName: (format) => `demo-components-lib.${format}.js`,
+            fileName: (format) => `vite-demo-components-lib.${format}.js`,
         },
         rollupOptions: {
             //Library Mode

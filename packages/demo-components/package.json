@@ -2,6 +2,14 @@
   "name": "@owlprotocol/vite-demo-components",
   "private": true,
   "version": "0.0.0",
+  "main": "dist/vite-demo-components-lib.umd.js",
+  "module": "dist/vite-demo-components-lib.es.js",
+  "exports": {
+    ".": {
+      "require": "./dist/vite-demo-components-lib.umd.js",
+      "import": "./dist/vite-demo-components-lib.es.js"
+    }
+  },
   "scripts": {
     "build": "vite build",
     "storybook": "start-storybook -p 6006",
