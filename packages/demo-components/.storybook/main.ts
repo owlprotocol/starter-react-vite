@@ -2,21 +2,17 @@
 const { mergeConfig } = require('vite');
 
 //https://medium.com/@ftaioli/using-node-js-builtin-modules-with-vite-6194737c2cd2
+//ESBuild Plugins
 const NodeGlobalsPolyfillPlugin = require('@esbuild-plugins/node-globals-polyfill').NodeGlobalsPolyfillPlugin
 const NodeModulesPolyfillPlugin = require('@esbuild-plugins/node-modules-polyfill').NodeModulesPolyfillPlugin
-const rollupNodePolyFill = require('rollup-plugin-node-polyfills')
-///require('rollup-plugin-polyfill-node');
+
+//Rollup Plugins
 const rollupInject = require('@rollup/plugin-inject')
-const rollupCommonJS = require('@rollup/plugin-commonjs')
-const rollupAlias = require('@rollup/plugin-alias')
 
-//const dts = require('vite-dts').default
+//Vite Plugins
 const EnvironmentPlugin = require('vite-plugin-environment').default;
-
-//Typescript, ESLint check
-const Checker = require('vite-plugin-checker').default;
-//SVGR
-const svgrPlugin = require('vite-plugin-svgr').default;
+const CheckerPlugin = require('vite-plugin-checker').default;
+const SVGRPlugin = require('vite-plugin-svgr').default;
 
 module.exports = {
     framework: "@storybook/react",
@@ -39,14 +35,13 @@ module.exports = {
         interactionsDebugger: true,
     },
     async viteFinal(config) {
-
         const overrideConfig = {
             optimizeDeps: {
                 include: [],
                 exclude: [],
                 esbuildOptions: {
                     define: {
-                        global: 'globalThis'
+                        global: 'globalThis',
                     },
                     plugins: [
                         NodeGlobalsPolyfillPlugin({
@@ -62,12 +57,12 @@ module.exports = {
                 }),
                 //Expose envars with traditional process.env
                 EnvironmentPlugin('all', { prefix: 'VITE_' }),
-                svgrPlugin({
+                SVGRPlugin({
                     svgrOptions: {
                         icon: true,
                     },
                 }),
-                Checker({
+                CheckerPlugin({
                     typescript: true,
                     overlay: true,
                     eslint: {
@@ -77,43 +72,30 @@ module.exports = {
             ],
             resolve: {
                 alias: {
-                    //process: 'rollup-plugin-node-polyfills/polyfills/process-es6',
                     stream: 'rollup-plugin-node-polyfills/polyfills/stream',
                     http: 'rollup-plugin-node-polyfills/polyfills/http',
                     https: 'rollup-plugin-node-polyfills/polyfills/http',
                     buffer: 'rollup-plugin-node-polyfills/polyfills/buffer-es6',
-                    //web3: 'web3/dist/web3.min.js'
+                    web3: 'web3/dist/web3.min.js'
+                }
+            },
+            build: {
+                commonjsOptions: {
+                    transformMixedEsModules: false,
+                },
+                rollupOptions: {
+                    output: {
+                        manualChunks: {
+                            //web3: ['web3'],
+                            //lodash: ['lodash']
+                        }
+                    }
                 }
             }
         }
 
-        /*
-        config.build = {
-            ...(config.build ?? {}),
-            commonjsOptions: {
-                transformMixedEsModules: true, //Include web3
-                include: [
-                    '../../node_modules/.pnpm/web3-utils@1.7.0/node_modules/web3-utils/lib/utils.js'
-                ]
-                //exclude: [
-                //'../../node_modules/.pnpm/rlp@2.2.7/node_modules/rlp/dist.browser/index.js'
-                //]
-            },
-            rollupOptions: {
-                preserveModules: true,
-                plugins: [
-                    // Enable rollup polyfills plugin
-                    // used during production bundling
-                    rollupAlias({
-                        entries: [{
-                            find: 'buffer', replacement: 'rollup-plugin-node-polyfills/polyfills/buffer-es6'
-                        }]
-                    }),
-                ],
-            },
-        }
-        */
-
+        console.debug(config)
+        console.debug(overrideConfig)
         const newConfig = mergeConfig(config, overrideConfig)
         return newConfig;
     }
