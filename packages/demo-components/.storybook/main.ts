@@ -98,15 +98,14 @@ module.exports = {
             ...(config.define ?? {}),
         }
 
+        /*
         config.build = {
             ...(config.build ?? {}),
             commonjsOptions: {
                 transformMixedEsModules: true, //Include web3
-                /*
                 include: [
                     '../../node_modules/.pnpm/web3-utils@1.7.0/node_modules/web3-utils/lib/utils.js'
                 ]
-                */
                 //exclude: [
                 //'../../node_modules/.pnpm/rlp@2.2.7/node_modules/rlp/dist.browser/index.js'
                 //]
@@ -116,19 +115,15 @@ module.exports = {
                 plugins: [
                     // Enable rollup polyfills plugin
                     // used during production bundling
-                    /*
                     rollupAlias({
                         entries: [{
                             find: 'buffer', replacement: 'rollup-plugin-node-polyfills/polyfills/buffer-es6'
                         }]
                     }),
-                    */
-                    /*
-
-                     */
                 ],
             },
         }
+        */
 
         console.debug(config)
 
