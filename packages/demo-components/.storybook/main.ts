@@ -1,4 +1,6 @@
 //NodeJS Polyfills
+const { mergeConfig } = require('vite');
+
 //https://medium.com/@ftaioli/using-node-js-builtin-modules-with-vite-6194737c2cd2
 const NodeGlobalsPolyfillPlugin = require('@esbuild-plugins/node-globals-polyfill').NodeGlobalsPolyfillPlugin
 const NodeModulesPolyfillPlugin = require('@esbuild-plugins/node-modules-polyfill').NodeModulesPolyfillPlugin
@@ -37,65 +39,52 @@ module.exports = {
         interactionsDebugger: true,
     },
     async viteFinal(config) {
-        console.debug(config)
 
-        config.optimizeDeps = config.optimizeDeps ?? {}
-        config.optimizeDeps.include = [
-            ...(config.optimizeDeps?.include ?? []),
-        ];
-        config.optimizeDeps.exclude = [
-            ...(config.optimizeDeps?.exclude ?? []),
-        ]
-
-        // Enable esbuild polyfill plugins
-        config.optimizeDeps.esbuildOptions = config.optimizeDeps.esbuildOptions ?? {}
-
-        config.optimizeDeps.esbuildOptions.define = {
-            global: 'globalThis'
-        }
-
-        config.optimizeDeps.esbuildOptions.plugins = [
-            ...(config.optimizeDeps?.esbuildOptions?.plugins ?? []),
-            NodeGlobalsPolyfillPlugin({
-                process: true,
-                buffer: true,
-            }),
-            //NodeModulesPolyfillPlugin(),
-        ]
-
-        config.plugins = [
-            ...(config.plugins ?? []),
-            rollupInject({
-                Buffer: ['buffer', 'Buffer'],
-            }),
-            //Expose envars with traditional process.env
-            EnvironmentPlugin('all', { prefix: 'VITE_' }),
-            svgrPlugin({
-                svgrOptions: {
-                    icon: true,
-                },
-            }),
-            Checker({
-                typescript: true,
-                overlay: true,
-                eslint: {
-                    lintCommand: 'eslint --ext .ts,.tsx src --fix',
-                },
-            }),
-        ];
-
-        config.resolve.alias = {
-            ...(config.resolve?.alias ?? {}),
-            //process: 'rollup-plugin-node-polyfills/polyfills/process-es6',
-            stream: 'rollup-plugin-node-polyfills/polyfills/stream',
-            http: 'rollup-plugin-node-polyfills/polyfills/http',
-            https: 'rollup-plugin-node-polyfills/polyfills/http',
-            buffer: 'rollup-plugin-node-polyfills/polyfills/buffer-es6',
-            //web3: 'web3/dist/web3.min.js'
-        }
-
-        config.define = {
-            ...(config.define ?? {}),
+        const overrideConfig = {
+            optimizeDeps: {
+                include: [],
+                exclude: [],
+                esbuildOptions: {
+                    define: {
+                        global: 'globalThis'
+                    },
+                    plugins: [
+                        NodeGlobalsPolyfillPlugin({
+                            process: true,
+                            buffer: true,
+                        }),
+                    ]
+                }
+            },
+            plugins: [
+                rollupInject({
+                    Buffer: ['buffer', 'Buffer'],
+                }),
+                //Expose envars with traditional process.env
+                EnvironmentPlugin('all', { prefix: 'VITE_' }),
+                svgrPlugin({
+                    svgrOptions: {
+                        icon: true,
+                    },
+                }),
+                Checker({
+                    typescript: true,
+                    overlay: true,
+                    eslint: {
+                        lintCommand: 'eslint --ext .ts,.tsx src --fix',
+                    },
+                }),
+            ],
+            resolve: {
+                alias: {
+                    //process: 'rollup-plugin-node-polyfills/polyfills/process-es6',
+                    stream: 'rollup-plugin-node-polyfills/polyfills/stream',
+                    http: 'rollup-plugin-node-polyfills/polyfills/http',
+                    https: 'rollup-plugin-node-polyfills/polyfills/http',
+                    buffer: 'rollup-plugin-node-polyfills/polyfills/buffer-es6',
+                    //web3: 'web3/dist/web3.min.js'
+                }
+            }
         }
 
         /*
@@ -125,8 +114,7 @@ module.exports = {
         }
         */
 
-        console.debug(config)
-
-        return config;
+        const newConfig = mergeConfig(config, overrideConfig)
+        return newConfig;
     }
 };
