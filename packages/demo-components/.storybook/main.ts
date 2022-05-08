@@ -14,37 +14,34 @@ const EnvironmentPlugin = require('vite-plugin-environment').default;
 //Typescript, ESLint check
 const Checker = require('vite-plugin-checker').default;
 //SVGR
-const svgrPlugin = require('vite-plugin-svgr');
+const svgrPlugin = require('vite-plugin-svgr').default;
 
 module.exports = {
+    framework: "@storybook/react",
     stories: [
         '../src/**/*.stories.mdx',
         '../src/**/*.stories.@(js|jsx|ts|tsx)'
     ],
     addons: [
+        /*
         "@storybook/addon-links",
         "@storybook/addon-essentials",
         "@storybook/addon-interactions",
+        */
     ],
-    framework: "react",
     core: {
-        builder: "storybook-builder-vite"
+        builder: "@storybook/builder-vite"
     },
     features: {
         storyStoreV7: true,
         interactionsDebugger: true,
     },
-    async viteFinal(config: any) {
+    async viteFinal(config) {
         console.debug(config)
 
         config.optimizeDeps = config.optimizeDeps ?? {}
         config.optimizeDeps.include = [
             ...(config.optimizeDeps?.include ?? []),
-            '@owlprotocol/web3-redux',
-            '@storybook/testing-library',
-            '@storybook/jest',
-            'js-sha3',
-            'web3'
         ];
         config.optimizeDeps.exclude = [
             ...(config.optimizeDeps?.exclude ?? []),
@@ -67,6 +64,7 @@ module.exports = {
         ]
 
         config.plugins = [
+            ...(config.plugins ?? []),
             rollupInject({
                 Buffer: ['buffer', 'Buffer'],
             }),
@@ -84,7 +82,6 @@ module.exports = {
                     lintCommand: 'eslint --ext .ts,.tsx src --fix',
                 },
             }),
-            ...(config.plugins ?? []),
         ];
 
         config.resolve.alias = {

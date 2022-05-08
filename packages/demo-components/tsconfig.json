@@ -17,11 +17,16 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": false,
+    "noEmit": true,
     "jsx": "react-jsx",
     "outDir": "dist",
     "declaration": true,
-    "emitDeclarationOnly": true
+    "emitDeclarationOnly": false,
+    "types": [
+      "node",
+      "vite-plugin-svgr/client",
+      "jest"
+    ]
   },
   "include": [
     "src"
