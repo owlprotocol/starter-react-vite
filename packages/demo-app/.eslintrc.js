@@ -1,5 +1,3 @@
-const prettierrc = require('rc')('./prettier');
-
 module.exports = {
     env: {
         node: true,
