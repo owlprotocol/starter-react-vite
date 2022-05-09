@@ -3,11 +3,11 @@ const { mergeConfig } = require('vite');
 
 //https://medium.com/@ftaioli/using-node-js-builtin-modules-with-vite-6194737c2cd2
 //ESBuild Plugins
-const NodeGlobalsPolyfillPlugin = require('@esbuild-plugins/node-globals-polyfill').NodeGlobalsPolyfillPlugin
-const NodeModulesPolyfillPlugin = require('@esbuild-plugins/node-modules-polyfill').NodeModulesPolyfillPlugin
+//const NodeGlobalsPolyfillPlugin = require('@esbuild-plugins/node-globals-polyfill').NodeGlobalsPolyfillPlugin
+//const NodeModulesPolyfillPlugin = require('@esbuild-plugins/node-modules-polyfill').NodeModulesPolyfillPlugin
 
 //Rollup Plugins
-const rollupInject = require('@rollup/plugin-inject')
+//const rollupInject = require('@rollup/plugin-inject')
 
 //Vite Plugins
 //const EnvironmentPlugin = require('vite-plugin-environment').default;
@@ -44,17 +44,21 @@ module.exports = {
                         global: 'globalThis',
                     },
                     plugins: [
+                        /*
                         NodeGlobalsPolyfillPlugin({
                             process: true,
                             buffer: true,
                         }),
+                        */
                     ]
                 }
             },
             plugins: [
+                /*
                 rollupInject({
                     Buffer: ['buffer', 'Buffer'],
                 }),
+                */
                 //Expose envars with traditional process.env
                 //EnvironmentPlugin('all', { prefix: 'VITE_' }),
                 SVGRPlugin({
