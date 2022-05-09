@@ -1,4 +1,4 @@
-import { ImportMetaEnv } from './.env';
+import { ImportMetaEnv } from './vite-env';
 
 let environment = {
     VITE_APP_TITLE: import.meta.env.VITE_APP_TITLE,
